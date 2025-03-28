@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hari Raya Aidilfitri Greeting</title>
+    <style>
+        :root {
+            --primary: #fff;
+            --bg-color: #0a3a2a;
+            --bg-envelope-color: #e8f5e9;
+            --envelope-tab: #c8e6c9;
+            --envelope-cover: #a5d6a7;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --txt-color: #2e7d32;
+            --gold: #ffd700;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .container {
+            display: grid;
+            place-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 230px;
+            transition: transform 0.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 130px solid var(--envelope-tab);
+            border-right: 150px solid transparent;
+            border-left: 150px solid transparent;
+            transform-origin: top;
+            transition: all 0.5s ease-in-out;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 2;
+            width: 0px;
+            height: 0px;
+            border-top: 130px solid transparent;
+            border-right: 150px solid var(--envelope-cover);
+            border-bottom: 100px solid var(--envelope-cover);
+            border-left: 150px solid var(--envelope-cover);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .envelope::before {
+            background-image: 
+                linear-gradient(45deg, transparent 45%, var(--gold) 45%, var(--gold) 55%, transparent 55%),
+                linear-gradient(-45deg, transparent 45%, var(--gold) 45%, var(--gold) 55%, transparent 55%);
+            background-size: 20px 20px;
+        }
+
+        .letter {
+            position: absolute;
+            right: 20%;
+            bottom: 0;
+            width: 65%;
+            height: 80%;
+            background: var(--primary);
+            text-align: center;
+            transition: all 1s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 10px;
+            z-index: 1;
+            border-radius: 5px;
+            background-image: linear-gradient(to bottom, #fff, #e8f5e9);
+            border: 1px solid var(--gold);
+        }
+
+        .text {
+            color: var(--txt-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            width: 0;
+            opacity: 0;
+            animation: typing 3s steps(40, end) forwards, fadeIn 0.5s forwards;
+        }
+
+        .typewriter.greeting-title {
+            color: #000000;
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: -90px;
+            margin-bottom: 15px;
+            animation-delay: 0.5s;
+            text-transform: uppercase;
+        }
+
+        .typewriter.greeting-main {
+            color: #d32f2f;
+            font-size: 9px;
+            margin-bottom: 1px;
+            animation-delay: 2s;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .typewriter.greeting-sub {
+            color: #2e7d32;
+            font-size: 9px;
+            margin-bottom: 1px;
+            animation-delay: 4s;
+        }
+
+        .typewriter.greeting-request {
+            color: #d32f2f;
+            font-size: 9px;
+            margin-bottom: 10px;
+            animation-delay: 6s;
+        }
+
+        .typewriter.greeting-from {
+            color: #2e7d32;
+            font-size: 9px;
+            font-weight: bold;
+            margin-bottom: 1px;
+            animation-delay: 8s;
+        }
+
+        .typewriter.greeting-name {
+            color: #d32f2f;
+            font-size: 9px;
+            margin-bottom: 5px;
+            font-style: italic;
+            animation-delay: 9s;
+        }
+
+        .clickable-ketupat {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            z-index: 4;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .clickable-ketupat:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .floating-ketupat {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            z-index: 5;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .flap .clickable-ketupat {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .letter img {
+            display: block;
+            margin: 0 auto 15px auto;
+            width: 60px;
+            height: auto;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            border: 2px solid var(--gold);
+            padding: 3px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .flap .letter img {
+            opacity: 1;
+            animation: fadeIn 1s forwards;
+            animation-delay: 0.5s;
+        }
+
+        .flap .envelope::before {
+            transform: rotateX(180deg);
+        }
+
+        .flap .letter {
+            transform: scale(1.7) translateY(-150px);
+            z-index: 3;
+        }
+
+        .flap .envelope {
+            transform: translateY(200px);
+        }
+
+        .flap .envelope::before, 
+        .flap .envelope::after {
+            opacity:0;
+        }
+
+        .lampu {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid var(--gold);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .flap .lampu {
+            opacity: 1;
+            animation: flicker 2s ease-in-out infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hidden YouTube Players -->
+    <div id="bgMusicPlayer" style="display: none;"></div>
+    <div id="fireworkPlayer" style="display: none;"></div>
+
+    <canvas id="fireworksCanvas"></canvas>
+    <div class="container">
+        <div class="envelope-wrapper">
+            <div class="floating-ketupat"></div>
+            <div class="envelope">
+                <div class="letter">
+                    <img src="L.jpg" alt="Hari Raya Greetings">
+                    <div class="text">
+                        <p class="typewriter greeting-title"><strong>To All People</strong></p>
+                        <p class="typewriter greeting-main">Selamat Hari Raya</p>
+                        <p class="typewriter greeting-sub">Maaf Zahir dan Batin</p>
+                        <p class="typewriter greeting-request">Kalau ada tersilap kata saya minta maaf</p>
+                        <p class="typewriter greeting-from">From</p>
+                        <p class="typewriter greeting-name">Ludroz</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lampu"></div>
+            <div class="clickable-ketupat"></div>
+        </div>
+    </div>
+    
+    <!-- YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <script>
+        // YouTube Players
+        let bgMusicPlayer;
+        let fireworkPlayer;
+        let bgMusicStarted = false;
+
+        // YouTube Video IDs
+        const BG_MUSIC_ID = "DCr2lGIKM_M";
+        const FIREWORK_SOUND_ID = "zbu-fVXP5nI";
+
+        function onYouTubeIframeAPIReady() {
+            // Background music player
+            bgMusicPlayer = new YT.Player('bgMusicPlayer', {
+                videoId: BG_MUSIC_ID,
+                playerVars: {
+                    autoplay: 0,  // Start with autoplay off
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    iv_load_policy: 3,
+                    loop: 1,
+                    modestbranding: 1,
+                    playlist: BG_MUSIC_ID,
+                    rel: 0,
+                    showinfo: 0,
+                    enablejsapi: 1
+                },
+                events: {
+                    'onReady': onBgMusicReady,
+                    'onError': onPlayerError
+                }
+            });
+
+            // Firework sound player
+            fireworkPlayer = new YT.Player('fireworkPlayer', {
+                videoId: FIREWORK_SOUND_ID,
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    iv_load_policy: 3,
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0,
+                    enablejsapi: 1
+                },
+                events: {
+                    'onReady': onFireworkPlayerReady,
+                    'onError': onPlayerError
+                }
+            });
+        }
+
+        function onBgMusicReady(event) {
+            event.target.setVolume(100); // Set to full volume
+            // Don't try to autoplay - wait for user interaction
+        }
+
+        function onFireworkPlayerReady(event) {
+            event.target.setVolume(30);
+        }
+
+        function onPlayerError(error) {
+            console.error('YouTube Player Error:', error);
+        }
+
+        // Fireworks animation
+        const canvas = document.getElementById("fireworksCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Firework {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = Math.random() * 3 + 2;
+                this.speedX = (Math.random() - 0.5) * 6;
+                this.speedY = Math.random() * -8 - 4;
+                this.gravity = 0.1;
+                this.alpha = 1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.alpha -= 0.02;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.closePath();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        let fireworks = [];
+        function createFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.5;
+            const colors = ["#ff0000", "#ff7300", "#ffeb00", "#00ff00", "#00aaff", "#aa00ff"];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for (let i = 0; i < 30; i++) {
+                fireworks.push(new Firework(x, y, color));
+            }
+            playFireworkSound();
+        }
+
+        function playFireworkSound() {
+            try {
+                if (fireworkPlayer && typeof fireworkPlayer.seekTo === 'function') {
+                    fireworkPlayer.seekTo(0);
+                    fireworkPlayer.playVideo();
+                }
+            } catch (e) {
+                console.log("Error playing firework sound:", e);
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            fireworks.forEach((firework, index) => {
+                firework.update();
+                firework.draw();
+                if (firework.alpha <= 0) fireworks.splice(index, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+
+        setInterval(createFirework, 500);
+        animate();
+
+        // Envelope interaction - THIS IS WHERE MUSIC STARTS
+        const envelope = document.querySelector('.envelope-wrapper');
+        const ketupat = document.querySelector('.clickable-ketupat');
+        
+        ketupat.addEventListener('click', () => {
+            if (!envelope.classList.contains('flap')) {
+                envelope.classList.add('flap');
+                
+                // START THE MUSIC HERE
+                if (bgMusicPlayer) {
+                    bgMusicPlayer.setVolume(100);
+                    bgMusicPlayer.playVideo();
+                    bgMusicStarted = true;
+                }
+                
+                // Create fireworks
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        createFirework();
+                    }, i * 200);
+                }
+            }
+        });
+
+        setTimeout(() => {
+            createFirework();
+        }, 1000);
+    </script>
+</body>
+</html>
